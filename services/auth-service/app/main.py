@@ -4,7 +4,6 @@ from . import schemas, security, dependencies
 
 app = FastAPI(title="Auth Service", description="Handles Authentication & RBAC")
 
-# Mock Database for testing
 fake_users_db = {
     "customer_bob": {
         "username": "customer_bob",
@@ -27,13 +26,11 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
             detail="Incorrect username or password"
         )
     
-    # Create JWT token embedding the user's role for RBAC
     access_token = security.create_access_token(
         data={"sub": user["username"], "role": user["role"]}
     )
     return {"access_token": access_token, "token_type": "bearer"}
 
-# --- PROTECTED ROUTES ---
 
 @app.get("/users/me")
 async def read_users_me(current_user: dict = Depends(dependencies.get_current_user)):

@@ -24,7 +24,6 @@ def get_current_user(token: str = Depends(oauth2_scheme)):
         raise credentials_exception
 
 def require_role(required_role: str):
-    """Dependency to check if a user has a specific role (RBAC)"""
     def role_checker(current_user: dict = Depends(get_current_user)):
         if current_user["role"] != required_role:
             raise HTTPException(status_code=403, detail="Not enough permissions")

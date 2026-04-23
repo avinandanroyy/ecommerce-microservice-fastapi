@@ -18,7 +18,6 @@ async def create_product(product: schemas.ProductCreate):
 
 @app.get("/products/stats")
 async def get_product_stats():
-    """Resume Point: ...and aggregation pipelines, improving query performance..."""
     pipeline = [
         {"$group": {
             "_id": "$category",
@@ -32,7 +31,6 @@ async def get_product_stats():
 
 @app.put("/products/{product_id}/deduct-stock")
 async def deduct_stock(product_id: str, quantity: int):
-    """Endpoint used by the Order Service for transactions"""
     result = await database.product_collection.update_one(
         {"_id": ObjectId(product_id), "stock_quantity": {"$gte": quantity}},
         {"$inc": {"stock_quantity": -quantity}}
